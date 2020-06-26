@@ -1,0 +1,30 @@
+version: "3"
+services:
+  teamcity-server:
+    image: jetbrains/teamcity-server
+    container_name: teamcity-server
+    depends_on:
+      - teamcity-postgres
+    ports:
+      - "8111:8111"
+    volumes:
+      - ./data:/data/teamcity_server/datadir
+      - ./logs:/opt/teamcity/logs
+  teamcity-agent:
+    image: jetbrains/teamcity-agent
+    depends_on:
+      - teamcity-server
+    container_name: teamcity-agent
+    environment:
+      SERVER_URL: "http://teamcity-server:8111/"
+    volumes:
+      - ./agent:/data/teamcity_agent/conf
+  teamcity-postgres:
+    image: postgres
+    container_name: teamcity-postgres
+    environment:
+      POSTGRES_DB: "teamcity"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "secret"
+    volumes:
+      - ./db-data:/var/lib/postgresql/data

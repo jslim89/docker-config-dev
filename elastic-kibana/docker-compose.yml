@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: elasticsearch_1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - http.cors.enabled=true
+      - http.cors.allow-credentials=true
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-origin=/https?:\/\/localhost(:[0-9]+)?/
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    #command: bash -c "
+    #    /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-smartcn
+    #  "
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    container_name: kibana_1
+    environment:
+      - "SERVER_NAME=kibana"
+      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
+    ports:
+      - 5601:5601
+    networks:
+      - esnet
+    restart: "unless-stopped"
+
+volumes:
+  esdata1:
+    driver: local
+
+networks:
+  esnet:

@@ -1,0 +1,14 @@
+version:  '3'
+services:
+  jupyter-scipy-notebook:
+      image:    jupyter/scipy-notebook
+      volumes:
+        - ./work/notebooks:/home/jovyan/work/notebooks
+        - ./work/datasets:/home/jovyan/work/datasets
+        - ./work/modules:/home/jovyan/work/modules
+      ports:
+        - 8888:8888
+      container_name:   jupyter_notebook
+      command: bash -c "pip3 install xmltodict && start-notebook.sh"
+      environment:
+        - GRANT_SUDO=yes
