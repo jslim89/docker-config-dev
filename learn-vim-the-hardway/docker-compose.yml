@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  alpine-learn-vim:
+    image: "alpine:3.12"
+    container_name: "alpine-learn-vim"
+    user: "root"
+    #entrypoint: ["tail", "-f", "/dev/null"]
+    entrypoint: ["sleep", "infinity"]
+    command: sh -c "
+        apk update
+        && apk add bash vim
+      "

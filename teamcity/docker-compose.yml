@@ -18,7 +18,7 @@ services:
     environment:
       SERVER_URL: "http://teamcity-server:8111/"
     volumes:
-      - ./agent:/data/teamcity_agent/conf
+      - ./agent:/opt/teamcity_agent/conf
   teamcity-postgres:
     image: postgres
     container_name: teamcity-postgres

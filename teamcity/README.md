@@ -14,3 +14,8 @@ First time setup, select **Postgres** as storage
 ```
 $ docker-composer up -d
 ```
+
+For teamcity login
+
+- Username: `admin`
+- Password: `admin`
