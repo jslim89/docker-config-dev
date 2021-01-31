@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  php-fpm-base:
+    image: "jslim/php8-laravel-base:${TAG}"
+    build:
+      context: .
+      dockerfile: php8-Dockerfile
+
