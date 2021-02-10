@@ -12,5 +12,5 @@ $ docker login
 
 ```
 $ cd <dir>
-$ ./build-push.sh v1.2.12
+$ ./build-push.sh v1.2.12 <arg...>
 ```
