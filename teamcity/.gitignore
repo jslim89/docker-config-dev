@@ -1,4 +1,4 @@
-/agent
-/data
+/.env
+/agents
+/server
 /db-data
-/logs

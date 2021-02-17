@@ -1,0 +1,60 @@
+FROM jetbrains/teamcity-agent:2020.2.2
+
+ARG AWS_KEY
+ARG AWS_SECRET
+ARG GIT_USER
+ARG GIT_EMAIL
+ARG AWS_SECRET
+ARG USER_ID
+ARG DOCKER_GROUP_ID
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV AGENT_USER=buildagent
+
+USER root
+
+RUN apt-get update -y
+RUN apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+RUN apt-get update -y
+RUN apt-get install -y docker-ce docker-ce-cli containerd.io \
+    python3-pip \
+    terraform \
+    git \
+    vim
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# install pip packages
+RUN pip3 install awscli --upgrade --user
+RUN pip3 install requests
+
+# create user with host user id & docker group id
+RUN groupmod -g ${USER_ID} ${AGENT_USER}
+RUN usermod -g ${USER_ID} -G docker ${AGENT_USER}
+
+# sync docker group id between host and container
+RUN groupmod -g ${DOCKER_GROUP_ID} docker
+
+RUN mkdir /home/${AGENT_USER}/.aws && \
+    mkdir /home/${AGENT_USER}/.ssh && \
+    mkdir /home/${AGENT_USER}/.docker
+RUN echo "[default]\r\naws_access_key_id = ${AWS_KEY}\r\naws_secret_access_key = ${AWS_SECRET}" > /home/${AGENT_USER}/.aws/credentials
+
+USER ${AGENT_USER}
+
+RUN git config --global user.email "${GIT_EMAIL}" && \
+    git config --global user.name "${GIT_USER}"
+
+ENV PATH="~/.local/bin:${PATH}"

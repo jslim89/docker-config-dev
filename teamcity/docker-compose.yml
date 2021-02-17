@@ -1,30 +1,47 @@
 version: "3"
+
 services:
   teamcity-server:
-    image: jetbrains/teamcity-server
+    image: jetbrains/teamcity-server:2020.2.2
     container_name: teamcity-server
     depends_on:
       - teamcity-postgres
     ports:
-      - "8111:8111"
+      - "${SERVER_PORT}:8111"
     volumes:
-      - ./data:/data/teamcity_server/datadir
-      - ./logs:/opt/teamcity/logs
-  teamcity-agent:
-    image: jetbrains/teamcity-agent
+      - ./server/data:/data/teamcity:rw
+      - ./server/logs:/opt/teamcity/logs:rw
+
+  teamcity-agent-01:
+    image: local-teamcity-agent
+    build:
+      context: ./docker
+      dockerfile: ./Dockerfile.agent
+      args:
+        - USER_ID=${SYSTEM_UID}
+        - DOCKER_GROUP_ID=${SYSTEM_DID}
+        - AWS_KEY=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET=${AWS_SECRET_ACCESS_KEY}
+        - GIT_USER=${GIT_USER}
+        - GIT_EMAIL=${GIT_EMAIL}
     depends_on:
       - teamcity-server
-    container_name: teamcity-agent
+    container_name: teamcity-agent-01
     environment:
-      SERVER_URL: "http://teamcity-server:8111/"
+      SERVER_URL: "${SERVER_URL}"
+      AGENT_NAME: "agent-01"
+      AWS_DEFAULT_REGION: "${AWS_REGION}"
+      RUN_AS_BUILDAGENT: "true"
+    privileged: true
     volumes:
-      - ./agent:/opt/teamcity_agent/conf
+      - ./agents:/opt/teamcity:rw
+
   teamcity-postgres:
     image: postgres
     container_name: teamcity-postgres
     environment:
-      POSTGRES_DB: "teamcity"
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "secret"
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
     volumes:
       - ./db-data:/var/lib/postgresql/data
