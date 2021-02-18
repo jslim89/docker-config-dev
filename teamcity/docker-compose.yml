@@ -4,13 +4,18 @@ services:
   teamcity-server:
     image: jetbrains/teamcity-server:2020.2.2
     container_name: teamcity-server
+    user: ${SYSTEM_UID}
+    environment:
+      TEAMCITY_LOGS: /opt/teamcity/logs
+      TEAMCITY_DIST: /opt/teamcity
+      TEAMCITY_DATA_PATH: /data/teamcity
     depends_on:
       - teamcity-postgres
     ports:
       - "${SERVER_PORT}:8111"
     volumes:
       - ./server/data:/data/teamcity:rw
-      - ./server/logs:/opt/teamcity/logs:rw
+    restart: "always"
 
   teamcity-agent-01:
     image: local-teamcity-agent

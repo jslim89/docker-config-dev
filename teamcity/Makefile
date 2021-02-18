@@ -10,8 +10,10 @@ SYSTEM_DID := $(shell getent group docker | cut -d: -f3)
 export SYSTEM_DID
 
 up:
-	docker-compose -f docker-compose.yml up -d --build --force-recreate
+	docker-compose -f docker-compose.yml up -d
 stop:
 	docker-compose -f docker-compose.yml stop
+build:
+	docker-compose -f docker-compose.yml build
 down:
 	docker-compose -f docker-compose.yml down

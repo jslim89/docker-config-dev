@@ -49,7 +49,8 @@ RUN groupmod -g ${DOCKER_GROUP_ID} docker
 
 RUN mkdir /home/${AGENT_USER}/.aws && \
     mkdir /home/${AGENT_USER}/.ssh && \
-    mkdir /home/${AGENT_USER}/.docker
+    mkdir /home/${AGENT_USER}/.docker && \
+    chown -R ${AGENT_USER}:${AGENT_USER} /home/${AGENT_USER}/
 RUN echo "[default]\r\naws_access_key_id = ${AWS_KEY}\r\naws_secret_access_key = ${AWS_SECRET}" > /home/${AGENT_USER}/.aws/credentials
 
 USER ${AGENT_USER}
