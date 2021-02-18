@@ -15,6 +15,8 @@ services:
       - "${SERVER_PORT}:8111"
     volumes:
       - ./server/data:/data/teamcity:rw
+    networks:
+      - teamcity-network
     restart: "always"
 
   teamcity-agent-01:
@@ -40,6 +42,8 @@ services:
     privileged: true
     volumes:
       - ./agents:/opt/teamcity:rw
+    networks:
+      - teamcity-network
 
   teamcity-postgres:
     image: postgres
@@ -50,3 +54,9 @@ services:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
     volumes:
       - ./db-data:/var/lib/postgresql/data
+    networks:
+      - teamcity-network
+
+networks:
+  teamcity-network:
+    driver: bridge
