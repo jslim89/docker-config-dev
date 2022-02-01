@@ -1,0 +1,7 @@
+FROM node:17
+
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
+# Install Truffle
+RUN npm install -g truffle
+RUN npm config set bin-links false

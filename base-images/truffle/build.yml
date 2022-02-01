@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  node17-truffle:
+    image: "jslim/node${NODE_VERSION}-truffle:${TAG}"
+    build:
+      context: .
+      dockerfile: node${NODE_VERSION}-Dockerfile
+
