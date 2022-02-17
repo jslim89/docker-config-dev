@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  playground-ubuntu:
+    image: "ubuntu:21.10"
+    container_name: "playground-ubuntu"
+    user: "root"
+    volumes:
+      - ./files:/files
+    working_dir: /files
+    command: sh -c "
+        apt -y update
+        && apt install -y vim;
+        sleep infinity
+      "
