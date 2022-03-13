@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  python-brownie:
+    image: "jslim/python-brownie:${TAG}"
+    build:
+      context: .
+      dockerfile: Dockerfile
+
