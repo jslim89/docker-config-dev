@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  latex-ubuntu:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
+        USER: ${USER}
+        GROUP: ${GROUP}
+    container_name: "latex-ubuntu"
+    volumes:
+      - ./files:/files
+    working_dir: /files
+    entrypoint: ['sleep', 'infinity']
