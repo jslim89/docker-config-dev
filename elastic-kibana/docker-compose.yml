@@ -2,8 +2,8 @@ version: '3'
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0-amd64
-    container_name: elasticsearch_1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.1.3-amd64
+    container_name: dev-es8
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -17,18 +17,25 @@ services:
       memlock:
         soft: -1
         hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
     volumes:
-      - esdata1:/usr/share/elasticsearch/data
+      - ./es-data:/usr/share/elasticsearch/data
+      - ./es-log:/usr/share/elasticsearch/logs
     #command: bash -c "
     #    /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-smartcn
     #  "
     ports:
       - 9200:9200
+      - 9300:9300
     networks:
       - esnet
+    restart: always
+
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.8.0
-    container_name: kibana_1
+    image: docker.elastic.co/kibana/kibana:8.1.3
+    container_name: dev-kibana8
     environment:
       - "SERVER_NAME=kibana"
       - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
@@ -39,7 +46,7 @@ services:
     restart: "unless-stopped"
 
 volumes:
-  esdata1:
+  es-data:
     driver: local
 
 networks:
