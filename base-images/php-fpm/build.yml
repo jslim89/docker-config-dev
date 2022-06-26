@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  php-fpm-base:
-    image: "jslim/php${PHP_VERSION}-laravel-base:${TAG}"
+  php-fpm-laravel:
+    image: "jslim/php-fpm-laravel:${TAG}"
     build:
       context: .
-      dockerfile: php${PHP_VERSION}-Dockerfile
+      dockerfile: Dockerfile
 
