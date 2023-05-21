@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 php:8.1-fpm
+FROM php:8.2-fpm
 
 # to prevent this warning
 # debconf: delaying package configuration, since apt-utils is not installed 
@@ -22,11 +22,6 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl
-
-# install npm
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install -y nodejs
-RUN curl -L https://npmjs.org/install.sh | sh
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
