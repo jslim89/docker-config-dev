@@ -3,6 +3,7 @@ version: "3"
 services:
   php-fpm-laravel:
     image: "jslim/php-fpm-laravel:${TAG}"
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
