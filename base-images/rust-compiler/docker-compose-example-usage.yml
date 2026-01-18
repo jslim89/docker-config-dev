@@ -1,0 +1,70 @@
+services:
+  build-linux-amd64:
+    platform: linux/amd64
+    image: jslim/rust-compiler:1.92-trixie
+    volumes:
+      - ..:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo build --target x86_64-unknown-linux-gnu --release
+    container_name: rs-build-linux-amd64
+
+  build-linux-arm64:
+    platform: linux/amd64
+    image: jslim/rust-compiler:1.92-trixie
+    volumes:
+      - ..:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    environment:
+      - RUSTFLAGS=-C linker=aarch64-linux-gnu-gcc
+    command: cargo build --target aarch64-unknown-linux-gnu --release
+    container_name: rs-build-linux-arm64
+
+  build-windows-amd64:
+    platform: linux/amd64
+    image: jslim/rust-compiler:1.92-trixie
+    volumes:
+      - ..:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo build --target x86_64-pc-windows-gnu --release
+    container_name: rs-build-windows-amd64
+
+  build-windows-arm64:
+    platform: linux/amd64
+    image: jslim/rust-compiler:1.92-trixie
+    volumes:
+      - ..:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    command: cargo build --target aarch64-pc-windows-gnullvm --release
+    container_name: rs-build-windows-arm64
+
+  build-alpine-amd64:
+    platform: linux/amd64
+    image: jslim/rust-compiler:1.92-trixie
+    volumes:
+      - ..:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    environment:
+      - RUSTFLAGS=-C linker=musl-gcc
+    command: cargo build --target x86_64-unknown-linux-musl --release
+    container_name: rs-build-alpine-amd64
+
+  build-alpine-arm64:
+    platform: linux/amd64
+    image: jslim/rust-compiler:1.92-trixie
+    volumes:
+      - ..:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    environment:
+      - RUSTFLAGS=-C linker=aarch64-musl-clang
+    command: cargo build --target aarch64-unknown-linux-musl --release
+    container_name: rs-build-alpine-arm64
+
+volumes:
+  cargo-cache:
+
