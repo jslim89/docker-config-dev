@@ -1,4 +1,4 @@
-FROM php:8.5-fpm
+FROM php:8.5.12-fpm
 
 # to prevent this warning
 # debconf: delaying package configuration, since apt-utils is not installed 
